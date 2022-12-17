@@ -103,5 +103,81 @@ if settings.DATASET == "MIRFlickr":
 
         def __len__(self):
             return len(self.train_labels)
+if settings.DATASET == "MSCOCO":
 
+    data = h5py.File(settings.DATA_PATH)
+    param_tmp = data['param']
+    param = {}
+
+    LAll_tmp = data['LAll']  # 标签信息
+    LABEL_DIR = np.array(LAll_tmp).transpose()
+    # LABEL_DIR =np.squeeze(np.transpose(np.array(LAll_tmp), (1, 0)))
+
+    label_set = LABEL_DIR
+    label_set = np.array(label_set, dtype=np.float)
+    TXT_DIR = np.squeeze(np.load(settings.TEXT_PATH))
+    txt_file = TXT_DIR  # h5py.File(TXT_DIR, 'r')
+    txt_set = np.array(txt_file).transpose()
+
+    indexTest = param_tmp['indexQuery']
+    indexDatabase = param_tmp['indexDatabase']
+    indexTrain = param_tmp['indexTrain']
+
+
+    coco_train_transform = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.Resize(256),
+        transforms.RandomCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+
+    coco_test_transform = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+
+    txt_feat_len = txt_set.shape[1]
+
+
+    class MSCOCO(torch.utils.data.Dataset):
+
+        def __init__(self, transform=None, target_transform=None, train=True, database=False):
+            self.transform = transform
+            self.target_transform = target_transform
+
+            if train:
+                self.train_labels = label_set[indexTrain]
+
+                self.train_index = indexTrain
+                self.txt = txt_set[indexTrain]
+            elif database:
+                self.train_labels = label_set[indexDatabase]
+                self.train_index = indexDatabase
+                self.txt = txt_set[indexDatabase]
+            else:
+                self.train_labels = label_set[indexTest]
+                self.train_index = indexTest
+                self.txt = txt_set[indexTest]
+
+        def __getitem__(self, index):
+            mscoco = h5py.File(settings.DATA_PATH, 'r', libver='latest', swmr=True)
+            img, target = mscoco['IAll'][self.train_index[index]], self.train_labels[index]
+            img = Image.fromarray(np.transpose(img, (2, 1, 0)))
+            mscoco.close()
+
+            txt = self.txt[index]
+
+            if self.transform is not None:
+                img = self.transform(img)
+
+            if self.target_transform is not None:
+                target = self.target_transform(target)
+
+            return img, txt, target, index
+
+        def __len__(self):
+            return len(self.train_labels)
 
