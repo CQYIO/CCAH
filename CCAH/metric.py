@@ -147,12 +147,12 @@ def p_topK(qB, rB, query_label, retrieval_label, K):
 
 def normalize(mx):
     """Row-normalize sparse matrix"""
-    rowsum = np.array(mx.sum(1))    #矩阵求和
-    r_inv = np.power(rowsum, -1).flatten()   #求和的-1次方
+    rowsum = np.array(mx.sum(1))    
+    r_inv = np.power(rowsum, -1).flatten()   
     r_inv[np.isinf(r_inv)] = 0.
     r_mat_inv = sp.diags(r_inv)
     mx = r_mat_inv.dot(mx)
-    return mx #返回归一化之后的矩阵
+    return mx 
 
 def normalize_adj(mx):
     """Row-normalize sparse matrix"""
