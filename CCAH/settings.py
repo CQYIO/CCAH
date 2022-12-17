@@ -2,29 +2,57 @@ import logging
 import os.path as osp
 import time
 
+
 # EVAL = True: just test, EVAL = False: train and eval
 EVAL = False
 
-
-DATASET = 'MIRFlickr'
-
+DATASET = 'MSCOCO'
 
 if DATASET == 'MIRFlickr':
     LABEL_DIR = 'D:/DataSet/mirflickr25k/LAll/mirflickr25k-lall.mat'
     TXT_DIR = 'D:/DataSet/mirflickr25k/YAll/mirflickr25k-yall.mat'
     IMG_DIR = 'D:/DataSet/mirflickr25k/IAll/mirflickr25k-iall.mat'
-    NUM_EPOCH = 100
-    LR_IMG = 0.01
-    LR_TXT = 0.01
+    NUM_EPOCH = 200
+    LR_IMG = 0.005
+    LR_TXT = 0.005
+    # loss = 1 * loss1 + 1 * loss2 + 1 * loss3 + 1 * loss4 + 1 * loss5 + 1 * loss6 + 2 * loss7 + 0.1 * loss31 + 0.1 * loss32
+    EVAL_INTERVAL = 1
+
+if DATASET == 'NUSWIDE':
+    LABEL_DIR = 'D:/DataSet/nus-wide-tc10/nus-wide-tc10-lall.mat'
+    TXT_DIR = 'D:/DataSet/nus-wide-tc10/nus-wide-tc10-yall.mat'
+    IMG_DIR = 'D:/DataSet/nus-wide-tc10/nus-wide-tc10-iall.mat'
+
+    NUM_EPOCH = 200
+    LR_IMG = 0.005
+    LR_TXT = 0.005
     EVAL_INTERVAL = 10
 
 
+if DATASET == 'MSCOCO':
+    DATA_PATH = 'D:/DataSet/coco_data/COCO.mat'
+    TEXT_PATH = 'D:/DataSet/coco_data/COCO_BoW.npy'
+    # data = h5py.File(DATA_PATH)  
+    #     # FALL_tmp = data['FALL']  # （1，87081）
+    #     # XALL_tmp = data['XALL']  # （4096，87081）
+    #     # param_tmp = data['param']
+    #     # LAll_tmp = data['LAll']  #（91，87081）
+    #     # LABEL_DIR = np.array(LAll_tmp).transpose()
+    #     # TXT_DIR = np.squeeze(np.load(TEXT_PATH))
+    #     # IMG_DIR = data['IAll']  #（87081，3，224，224）
+    NUM_EPOCH = 200
+    LR_IMG = 0.005
+    LR_TXT = 0.005
+    EVAL_INTERVAL = 10
+
+
+
 K = 1.5
-ETA = 0.2
-ALPHA = 0.8
+ETA = 0.1
+ALPHA = 0.9
+
 BATCH_SIZE = 16
 CODE_LEN = 128
-
 MOMENTUM = 0.7
 WEIGHT_DECAY = 5e-4
 
