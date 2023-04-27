@@ -11,3 +11,5 @@ We provide two datasets, MS COCO we use the one provided by DAEH authors, please
 Flickr-25K, NUS-WIDE dataset, please refer to DSAH.
 
 MIRFlickr-25K ！[panbaidu[https://pan.baidu.com/s/1o5jSliFjAezBavyBOiJxew#list/path=%2F]   password: 8dub]
+
+NUS-WIDE (top-10 concept) ![panbaidu[https://pan.baidu.com/s/1GFljcAtWDQFDVhgx6Jv_nQ#list/path=%2F],password: ml4y]
