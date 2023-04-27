@@ -7,4 +7,4 @@ We provide the training models of GAT and GCN, you can compare them by yourself.
 
 
 # Dataset
-
+We provide two datasets, MS COCO we use the one provided by DAEH authors, please excuse us
